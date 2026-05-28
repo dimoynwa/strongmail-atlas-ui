@@ -1,4 +1,5 @@
 import { apiFetch } from './client';
+import type { WorkingCopyInitResponse } from '../types';
 
 export interface WorkingCopyOverrideItem {
   key: string;
@@ -18,19 +19,54 @@ export interface NormalizedWorkingCopy {
   modifiedKeys: string[];
 }
 
+export interface NormalizedWorkingCopyInit extends NormalizedWorkingCopy {
+  editCount: number;
+  toneKeyCount: number;
+}
+
+function buildWorkingCopyMaps(overrides: WorkingCopyOverrideItem[]): {
+  workingCopy: Record<string, string>;
+  modifiedKeys: string[];
+} {
+  const workingCopy: Record<string, string> = {};
+  const modifiedKeys: string[] = [];
+
+  for (const override of overrides ?? []) {
+    workingCopy[override.key] = override.value;
+    if (override.set_at != null) {
+      modifiedKeys.push(override.key);
+    }
+  }
+
+  return { workingCopy, modifiedKeys };
+}
+
 export function normalizeWorkingCopy(
   response: WorkingCopyApiResponse,
 ): NormalizedWorkingCopy {
-  const workingCopy: Record<string, string> = {};
+  return buildWorkingCopyMaps(response.overrides ?? []);
+}
 
-  for (const override of response.overrides ?? []) {
-    workingCopy[override.key] = override.value;
-  }
-
+export function normalizeInitResponse(
+  response: WorkingCopyInitResponse,
+): NormalizedWorkingCopyInit {
+  const { workingCopy, modifiedKeys } = buildWorkingCopyMaps(response.overrides ?? []);
   return {
     workingCopy,
-    modifiedKeys: Object.keys(workingCopy),
+    modifiedKeys,
+    editCount: response.total_overrides,
+    toneKeyCount: response.tone_key_count,
   };
+}
+
+export async function initWorkingCopy(
+  sessionId: string,
+): Promise<NormalizedWorkingCopyInit> {
+  const response = await apiFetch<WorkingCopyInitResponse>(
+    `/working-copy/${sessionId}/init`,
+    { method: 'POST' },
+  );
+  return normalizeInitResponse(response);
 }
 
 export async function getWorkingCopy(

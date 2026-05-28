@@ -6,10 +6,10 @@ describe('AppShell', () => {
   it('renders the four fixed UI regions', () => {
     render(<AppShell />);
 
-    expect(screen.getByText('StrongMail Agent Studio')).toBeInTheDocument();
+    expect(screen.getAllByText('Template Assistant').length).toBeGreaterThan(0);
     expect(screen.getByText('Chat')).toBeInTheDocument();
-    expect(screen.getByText('Preview')).toBeInTheDocument();
-    expect(screen.getByText('Working Copy')).toBeInTheDocument();
+    expect(screen.getByText('Live preview')).toBeInTheDocument();
+    expect(screen.getByText('Working copy')).toBeInTheDocument();
     expect(screen.getByText('Agent ready')).toBeInTheDocument();
   });
 });

@@ -17,13 +17,15 @@ export function ContextSelectors({
   const brands = useAppStore((state) => state.brands);
 
   return (
-    <div className="space-y-2 border-b border-border-ter p-3">
-      <label className="block text-xs font-medium text-text-sec">
-        Language
+    <div className="space-y-1 border-b border-border-ter p-2">
+      <div className="flex items-center gap-2">
+        <span className="w-[38px] flex-shrink-0 text-[10px] uppercase tracking-[0.04em] text-text-ter">
+          Lang
+        </span>
         <select
           value={langLocal}
           onChange={(event) => onLangChange(event.target.value)}
-          className="mt-1 w-full rounded border border-border-ter px-2 py-1 text-sm"
+          className="flex-1 rounded border border-border-sec bg-bg-primary px-1.5 py-1 text-[11px]"
         >
           {(locales.length ? locales : ['EN']).map((locale) => (
             <option key={locale} value={locale}>
@@ -31,13 +33,15 @@ export function ContextSelectors({
             </option>
           ))}
         </select>
-      </label>
-      <label className="block text-xs font-medium text-text-sec">
-        Brand
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="w-[38px] flex-shrink-0 text-[10px] uppercase tracking-[0.04em] text-text-ter">
+          Brand
+        </span>
         <select
           value={paramCustBrand}
           onChange={(event) => onBrandChange(event.target.value)}
-          className="mt-1 w-full rounded border border-border-ter px-2 py-1 text-sm"
+          className="flex-1 rounded border border-border-sec bg-bg-primary px-1.5 py-1 text-[11px]"
         >
           {(brands.length ? brands : ['SKRILL']).map((brand) => (
             <option key={brand} value={brand}>
@@ -45,7 +49,7 @@ export function ContextSelectors({
             </option>
           ))}
         </select>
-      </label>
+      </div>
     </div>
   );
 }
