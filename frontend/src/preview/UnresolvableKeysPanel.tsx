@@ -19,7 +19,7 @@ export function UnresolvableKeysPanel({ keys }: UnresolvableKeysPanelProps) {
   const countLabel = keys.length === 1 ? '1 unresolvable key' : `${keys.length} unresolvable keys`;
 
   return (
-    <div className="flex-shrink-0 border-t border-border-ter">
+    <div className="flex-shrink-0">
       <button
         type="button"
         className="flex w-full items-center gap-1.5 px-2.5 py-2"
@@ -35,7 +35,7 @@ export function UnresolvableKeysPanel({ keys }: UnresolvableKeysPanelProps) {
         />
       </button>
       {expanded && (
-        <div className="max-h-[160px] overflow-y-auto px-2.5 pb-2">
+        <div className="max-h-[180px] overflow-y-auto px-2.5 pb-2">
           <ul className="flex flex-col gap-1.5">
             {keys.map((entry) => (
               <li key={`${entry.key}-${entry.reason}`} className="flex gap-2">

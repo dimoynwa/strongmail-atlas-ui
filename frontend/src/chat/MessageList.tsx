@@ -10,7 +10,7 @@ export function MessageList() {
   const activeTool = useSessionStore((state) => state.activeTool);
 
   return (
-    <div className="flex-1 space-y-3 overflow-y-auto px-3 py-3">
+    <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-3 py-3">
       {messages.map((message) => (
         <div key={message.id}>
           <MessageBubble message={message} />

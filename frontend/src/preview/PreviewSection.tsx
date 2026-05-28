@@ -4,7 +4,7 @@ import { UnresolvableKeysPanel } from './UnresolvableKeysPanel';
 import { usePreviewRefresh } from '../hooks/usePreviewRefresh';
 import { useSessionStore } from '../store/sessionStore';
 
-export function PreviewColumn() {
+export function PreviewSection() {
   usePreviewRefresh();
 
   const unresolvableKeys = useSessionStore((state) => state.unresolvableKeys);
@@ -12,13 +12,13 @@ export function PreviewColumn() {
   const totalPlaceholders = useSessionStore((state) => state.totalPlaceholders);
 
   return (
-    <section className="flex w-[310px] flex-shrink-0 flex-col overflow-hidden border-r border-border-ter bg-bg-secondary">
+    <div className="preview-section bg-bg-secondary">
       <PreviewLabelBar
         resolvedCount={resolvedCount}
         totalPlaceholders={totalPlaceholders}
       />
-      <PreviewFrame />
       <UnresolvableKeysPanel keys={unresolvableKeys} />
-    </section>
+      <PreviewFrame />
+    </div>
   );
 }

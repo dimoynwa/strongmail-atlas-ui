@@ -11,7 +11,7 @@ export function ToneSection() {
   const deltas = useToneDeltas(toneScores, toneStoredScores);
 
   return (
-    <section className="flex flex-col">
+    <section className="flex flex-shrink-0 flex-col">
       <div className="flex items-center gap-1.5 border-b border-border-ter px-2.5 py-2">
         <i className="ti ti-mood-check text-[14px] text-text-sec" />
         <span className="flex-1 text-[11px] font-medium text-text-sec">Tone</span>

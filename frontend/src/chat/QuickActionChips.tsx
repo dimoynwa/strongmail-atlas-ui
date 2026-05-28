@@ -15,7 +15,7 @@ export function QuickActionChips() {
   if (!sessionId) return null;
 
   return (
-    <div className="flex flex-shrink-0 gap-1.5 overflow-x-auto px-3 pb-2 [scrollbar-width:none]">
+    <div className="flex h-8 flex-shrink-0 items-center gap-1.5 overflow-x-auto px-3 [scrollbar-width:none]">
       {QUICK_ACTIONS.map((action) => (
         <button
           key={action.label}

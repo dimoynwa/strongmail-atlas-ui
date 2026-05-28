@@ -14,7 +14,7 @@ export function ChatInput() {
   };
 
   return (
-    <div className="flex-shrink-0 border-t border-border-ter bg-bg-primary px-3 py-2">
+    <div className="flex h-12 flex-shrink-0 items-center border-t border-border-ter bg-bg-primary px-3">
       <div className="flex items-center gap-2">
         <input
           type="text"

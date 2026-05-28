@@ -10,7 +10,7 @@ export function PreviewLabelBar({
   const showResolvedSummary = totalPlaceholders > 0;
 
   return (
-    <div className="flex h-[34px] flex-shrink-0 items-center gap-1.5 border-b border-border-ter px-2.5">
+    <div className="flex h-9 flex-shrink-0 items-center gap-1.5 border-b border-border-ter px-3">
       <i className="ti ti-eye text-[14px] text-text-ter" />
       <span className="text-[11px] font-medium text-text-sec">Live preview</span>
       {showResolvedSummary && (

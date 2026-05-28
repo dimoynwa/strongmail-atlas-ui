@@ -84,3 +84,45 @@ body {
   width: 40%;
   animation: template-progress-sweep 1.2s ease-in-out infinite;
 }
+
+.content-area {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.col-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.col-right {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-left: 0.5px solid var(--color-border-tertiary);
+}
+
+.preview-section {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chat-section {
+  height: 320px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-top: 0.5px solid var(--color-border-tertiary);
+}

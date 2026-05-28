@@ -17,8 +17,14 @@ export interface PreviewResponse {
   totalPlaceholders: number;
 }
 
-export async function getPreview(sessionId: string): Promise<PreviewResponse> {
-  const response = await apiFetch<PreviewApiResponse>(`/preview/${sessionId}`);
+export async function getPreview(
+  sessionId: string,
+  options: { highlightModified?: boolean } = {},
+): Promise<PreviewResponse> {
+  const highlightModified = options.highlightModified ?? false;
+  const response = await apiFetch<PreviewApiResponse>(
+    `/preview/${sessionId}?highlight_modified=${highlightModified}`,
+  );
   return {
     html: response.resolved_html ?? '',
     unresolvableKeys: response.unresolvable_keys ?? [],

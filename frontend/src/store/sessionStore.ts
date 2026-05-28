@@ -31,8 +31,8 @@ const initialSessionState = {
   toneStoredScores: null as ToneScores | null,
   toneStale: false,
   activeTab: 'template' as 'template' | 'general',
-  previewVisible: true,
   resolvedHtml: '',
+  previewVersion: 0,
   unresolvableKeys: [] as UnresolvableKey[],
   resolvedCount: 0,
   totalPlaceholders: 0,
@@ -64,8 +64,8 @@ export interface SessionStore {
   toneStoredScores: ToneScores | null;
   toneStale: boolean;
   activeTab: 'template' | 'general';
-  previewVisible: boolean;
   resolvedHtml: string;
+  previewVersion: number;
   unresolvableKeys: UnresolvableKey[];
   resolvedCount: number;
   totalPlaceholders: number;
@@ -135,7 +135,7 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
         content: `Session opened for template "${templateName}". How can I help you edit it?`,
       };
 
-      set({
+      set((state) => ({
         sessionId: sessionResponse.session_id,
         templateName,
         workingCopy: initResult.workingCopy,
@@ -144,6 +144,7 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
         unresolvableKeys: previewState.unresolvableKeys,
         resolvedCount: previewState.resolvedCount,
         totalPlaceholders: previewState.totalPlaceholders,
+        previewVersion: state.previewVersion + 1,
         messages: [welcomeMessage],
         streamingText: '',
         activeTool: null,
@@ -154,7 +155,7 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
         editCount: initResult.editCount,
         toneKeyCount: initResult.toneKeyCount,
         activeTab: 'template',
-      });
+      }));
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       set({
@@ -248,15 +249,23 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
 
     const nextWorkingCopy = { ...workingCopy, ...updates };
     const nextModifiedKeys = new Set([...modifiedKeys, ...Object.keys(updates)]);
+    const previewState = await fetchAndSetPreview(
+      sessionId,
+      nextWorkingCopy,
+      nextModifiedKeys,
+    );
 
-    set({
+    set((state) => ({
       workingCopy: nextWorkingCopy,
       modifiedKeys: nextModifiedKeys,
+      resolvedHtml: previewState.resolvedHtml,
+      unresolvableKeys: previewState.unresolvableKeys,
+      resolvedCount: previewState.resolvedCount,
+      totalPlaceholders: previewState.totalPlaceholders,
+      previewVersion: state.previewVersion + 1,
       toneStale: true,
-      editCount: get().editCount + Object.keys(updates).length,
-    });
-
-    await get().refreshPreview();
+      editCount: state.editCount + Object.keys(updates).length,
+    }));
   },
 
   resetWorkingCopy: async () => {
@@ -268,16 +277,17 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
     const modifiedKeys = new Set(modifiedKeyList);
     const previewState = await fetchAndSetPreview(sessionId, workingCopy, modifiedKeys);
 
-    set({
+    set((state) => ({
       workingCopy,
       modifiedKeys,
       resolvedHtml: previewState.resolvedHtml,
       unresolvableKeys: previewState.unresolvableKeys,
       resolvedCount: previewState.resolvedCount,
       totalPlaceholders: previewState.totalPlaceholders,
+      previewVersion: state.previewVersion + 1,
       toneStale: true,
       editCount: 0,
-    });
+    }));
   },
 
   evaluateTone: async () => {
@@ -299,38 +309,61 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
     await undoTone(sessionId);
     const { workingCopy, modifiedKeys: modifiedKeyList } = await getWorkingCopy(sessionId);
     const modifiedKeys = new Set(modifiedKeyList);
+    const previewState = await fetchAndSetPreview(sessionId, workingCopy, modifiedKeys);
 
-    set({
+    set((state) => ({
       workingCopy,
       modifiedKeys,
+      resolvedHtml: previewState.resolvedHtml,
+      unresolvableKeys: previewState.unresolvableKeys,
+      resolvedCount: previewState.resolvedCount,
+      totalPlaceholders: previewState.totalPlaceholders,
+      previewVersion: state.previewVersion + 1,
       toneStale: true,
-    });
-
-    await get().refreshPreview();
+    }));
   },
 
-  refreshPreview: async () => {
-    const { sessionId, workingCopy, modifiedKeys } = get();
-    if (!sessionId) return;
+  refreshPreview: () =>
+    new Promise<void>((resolve, reject) => {
+      const { sessionId } = get();
+      if (!sessionId) {
+        resolve();
+        return;
+      }
 
-    if (previewDebounceTimer) {
-      clearTimeout(previewDebounceTimer);
-    }
+      if (previewDebounceTimer) {
+        clearTimeout(previewDebounceTimer);
+      }
 
-    previewDebounceTimer = setTimeout(async () => {
-      const previewState = await fetchAndSetPreview(
-        sessionId,
-        workingCopy,
-        modifiedKeys,
-      );
-      set({
-        resolvedHtml: previewState.resolvedHtml,
-        unresolvableKeys: previewState.unresolvableKeys,
-        resolvedCount: previewState.resolvedCount,
-        totalPlaceholders: previewState.totalPlaceholders,
-      });
-    }, 300);
-  },
+      previewDebounceTimer = setTimeout(() => {
+        void (async () => {
+          try {
+            const current = get();
+            if (!current.sessionId) {
+              resolve();
+              return;
+            }
+
+            const previewState = await fetchAndSetPreview(
+              current.sessionId,
+              current.workingCopy,
+              current.modifiedKeys,
+            );
+
+            set((state) => ({
+              resolvedHtml: previewState.resolvedHtml,
+              unresolvableKeys: previewState.unresolvableKeys,
+              resolvedCount: previewState.resolvedCount,
+              totalPlaceholders: previewState.totalPlaceholders,
+              previewVersion: state.previewVersion + 1,
+            }));
+            resolve();
+          } catch (error) {
+            reject(error);
+          }
+        })();
+      }, 300);
+    }),
 
   applyDiff: async (keys?: string[]) => {
     const { sessionId } = get();
@@ -341,15 +374,16 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
     const modifiedKeys = new Set(modifiedKeyList);
     const previewState = await fetchAndSetPreview(sessionId, workingCopy, modifiedKeys);
 
-    set({
+    set((state) => ({
       workingCopy,
       modifiedKeys,
       resolvedHtml: previewState.resolvedHtml,
       unresolvableKeys: previewState.unresolvableKeys,
       resolvedCount: previewState.resolvedCount,
       totalPlaceholders: previewState.totalPlaceholders,
+      previewVersion: state.previewVersion + 1,
       toneStale: true,
-    });
+    }));
   },
 
   setActiveTab: (tab) => set({ activeTab: tab }),

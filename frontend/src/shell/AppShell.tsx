@@ -2,9 +2,8 @@ import { StatusBar } from './StatusBar';
 import { Topbar } from './Topbar';
 import { TemplateLoadingOverlay } from './TemplateLoadingOverlay';
 import { Sidebar } from '../sidebar/Sidebar';
-import { ChatColumn } from '../chat/ChatColumn';
-import { PreviewColumn } from '../preview/PreviewColumn';
-import { RightPanel } from '../rightpanel/RightPanel';
+import { LeftColumn } from './LeftColumn';
+import { RightColumn } from './RightColumn';
 import { GeneralLayout } from '../general/GeneralLayout';
 import { useAppStore } from '../store/appStore';
 import { useSessionStore } from '../store/sessionStore';
@@ -34,10 +33,9 @@ export function AppShell() {
       <div className="flex min-h-0 flex-1">
         <Sidebar />
         {activeTab === 'template' ? (
-          <div className="content-area relative flex min-h-0 min-w-0 flex-1">
-            <ChatColumn />
-            <PreviewColumn />
-            <RightPanel />
+          <div className="content-area relative min-w-0">
+            <LeftColumn />
+            <RightColumn />
             {isOpeningTemplate && <TemplateLoadingOverlay />}
           </div>
         ) : (

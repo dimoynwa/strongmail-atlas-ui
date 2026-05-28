@@ -87,7 +87,6 @@ export interface SessionState {
   toneStoredScores: ToneScores | null;
   toneStale: boolean;
   activeTab: 'template' | 'general';
-  previewVisible: boolean;
   resolvedHtml: string;
 }
 
