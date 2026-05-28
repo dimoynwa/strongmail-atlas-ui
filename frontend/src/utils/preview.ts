@@ -1,6 +1,14 @@
 const HIGHLIGHT_STYLE =
   'border-left:2px solid #22c55e;padding-left:6px;color:#166534';
 
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 export function highlightModifiedValues(
   html: string,
   workingCopy: Record<string, string>,
@@ -12,12 +20,11 @@ export function highlightModifiedValues(
     const value = workingCopy[key];
     if (!value) continue;
 
-    const escaped = value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const pattern = new RegExp(`(${escaped})`, 'g');
-    result = result.replace(
-      pattern,
-      `<span style="${HIGHLIGHT_STYLE}">$1</span>`,
-    );
+    const index = result.indexOf(value);
+    if (index === -1) continue;
+
+    const highlighted = `<span style="${HIGHLIGHT_STYLE}">${escapeHtml(value)}</span>`;
+    result = result.slice(0, index) + highlighted + result.slice(index + value.length);
   }
 
   return result;

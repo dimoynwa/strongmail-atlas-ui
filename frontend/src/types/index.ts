@@ -8,6 +8,7 @@ export interface Message {
   id: string;
   role: 'user' | 'assistant';
   content: string;
+  isError?: boolean;
   toolName?: string;
   diff?: Record<string, { old: string; new: string }>;
   snapshotOverwritten?: boolean;
@@ -47,6 +48,25 @@ export interface TemplateListItem {
 export interface WorkingCopyOverride {
   key: string;
   value: string;
+  set_at?: string | null;
+}
+
+export type UnresolvableReason = 'MISSING_KEY' | 'BROKEN_RULE_CHAIN' | 'CYCLE';
+
+export interface UnresolvableKey {
+  key: string;
+  reason: UnresolvableReason;
+  detail: string;
+}
+
+export interface WorkingCopyInitResponse {
+  session_id: string;
+  overrides: WorkingCopyOverride[];
+  total_overrides: number;
+  session_has_changes: boolean;
+  initialized: boolean;
+  source: 'created' | 'existing';
+  tone_key_count: number;
 }
 
 export type HealthStatus = 'ok' | 'degraded' | 'unavailable';
@@ -67,7 +87,6 @@ export interface SessionState {
   toneStoredScores: ToneScores | null;
   toneStale: boolean;
   activeTab: 'template' | 'general';
-  previewVisible: boolean;
   resolvedHtml: string;
 }
 

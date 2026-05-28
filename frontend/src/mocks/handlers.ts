@@ -60,6 +60,17 @@ export const handlers = [
     );
   }),
 
+  http.post('/working-copy/:sessionId/init', ({ params }) => {
+    const sessionId = String(params.sessionId);
+    const response = workingCopyApiResponse(sessionId);
+    return HttpResponse.json({
+      ...response,
+      initialized: true,
+      source: 'created',
+      tone_key_count: Object.keys(workingCopyState).length,
+    });
+  }),
+
   http.patch('/working-copy/:sessionId', async ({ request }) => {
     const body = (await request.json()) as {
       key: string;

@@ -10,7 +10,7 @@ export function MessageList() {
   const activeTool = useSessionStore((state) => state.activeTool);
 
   return (
-    <div className="flex-1 space-y-3 overflow-y-auto p-4">
+    <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-3 py-3">
       {messages.map((message) => (
         <div key={message.id}>
           <MessageBubble message={message} />
@@ -22,7 +22,10 @@ export function MessageList() {
       {isStreaming && (
         <>
           {activeTool && (
-            <div className="text-xs text-text-sec">Running tool: {activeTool}</div>
+            <div className="mb-1 flex w-fit items-center gap-1 rounded-full border border-border-ter bg-bg-primary px-2 py-0.5 text-[10px] text-text-ter">
+              <i className="ti ti-cpu text-[11px]" />
+              {activeTool}
+            </div>
           )}
           {streamingText ? (
             <MessageBubble

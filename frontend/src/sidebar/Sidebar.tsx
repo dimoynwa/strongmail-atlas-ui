@@ -86,18 +86,26 @@ export function Sidebar() {
   );
 
   return (
-    <aside className="flex w-72 flex-col border-r border-border-ter bg-bg-primary">
-      <div className="flex border-b border-border-ter">
+    <aside className="flex w-[210px] flex-shrink-0 flex-col border-r border-border-ter bg-bg-secondary">
+      <div className="flex gap-1 border-b border-border-ter p-2">
         <button
           type="button"
-          className={`flex-1 px-3 py-2 text-sm ${activeTab === 'template' ? 'border-b-2 border-text-pri font-semibold' : 'text-text-sec'}`}
+          className={
+            activeTab === 'template'
+              ? 'flex-1 rounded-full border border-border-sec bg-bg-primary px-3 py-1.5 text-[10px] font-medium text-text-pri'
+              : 'flex-1 rounded-full px-3 py-1.5 text-[10px] text-text-sec'
+          }
           onClick={() => setActiveTab('template')}
         >
           Template
         </button>
         <button
           type="button"
-          className={`flex-1 px-3 py-2 text-sm ${activeTab === 'general' ? 'border-b-2 border-text-pri font-semibold' : 'text-text-sec'}`}
+          className={
+            activeTab === 'general'
+              ? 'flex-1 rounded-full border border-border-sec bg-bg-primary px-3 py-1.5 text-[10px] font-medium text-text-pri'
+              : 'flex-1 rounded-full px-3 py-1.5 text-[10px] text-text-sec'
+          }
           onClick={() => setActiveTab('general')}
         >
           General
@@ -118,7 +126,7 @@ export function Sidebar() {
             placeholder="Filter templates..."
             value={filter}
             onChange={(event) => setFilter(event.target.value)}
-            className="mx-3 my-2 rounded border border-border-ter px-2 py-1 text-sm"
+            className="mx-3 my-2 rounded border border-border-sec bg-bg-primary px-2 py-1 text-[11px] text-text-pri outline-none placeholder:text-text-ter"
           />
           <TemplateList templates={filteredTemplates} />
           <SidebarFooter />
@@ -127,7 +135,7 @@ export function Sidebar() {
 
       {confirmDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="w-80 rounded bg-bg-primary p-4 shadow-lg">
+          <div className="w-80 rounded-lg border border-border-ter bg-bg-primary p-4 shadow-lg">
             <p className="mb-4 text-sm">
               Changing {confirmDialog.type === 'lang' ? 'language' : 'brand'} will
               reset your current session. Continue?

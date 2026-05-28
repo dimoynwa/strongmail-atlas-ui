@@ -14,28 +14,29 @@ export function ChatInput() {
   };
 
   return (
-    <div className="border-t border-border-ter p-4">
-      <div className="flex gap-2">
-        <textarea
+    <div className="flex h-12 flex-shrink-0 items-center border-t border-border-ter bg-bg-primary px-3">
+      <div className="flex items-center gap-2">
+        <input
+          type="text"
           value={value}
-          onChange={(event) => setValue(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter' && !event.shiftKey) {
-              event.preventDefault();
+          onChange={(e) => setValue(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
               void handleSubmit();
             }
           }}
-          placeholder={sessionId ? 'Ask the assistant…' : 'Open a template first'}
+          placeholder={sessionId ? 'Ask about this template…' : 'Open a template first'}
           disabled={!sessionId || isStreaming}
-          className="min-h-[72px] flex-1 resize-none rounded border border-border-ter px-3 py-2 text-sm"
+          className="flex-1 rounded-full border border-border-ter bg-bg-secondary px-3 py-1.5 text-[12px] outline-none disabled:opacity-50"
         />
         <button
           type="button"
           onClick={() => void handleSubmit()}
           disabled={!sessionId || isStreaming || !value.trim()}
-          className="self-end rounded bg-text-pri px-4 py-2 text-sm text-white disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex h-[30px] w-[30px] flex-shrink-0 items-center justify-center rounded-full bg-bg-info disabled:opacity-50"
         >
-          Send
+          <i className="ti ti-arrow-up text-[14px] text-text-info" />
         </button>
       </div>
     </div>
