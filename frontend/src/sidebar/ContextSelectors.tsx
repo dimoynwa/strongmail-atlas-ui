@@ -17,29 +17,29 @@ export function ContextSelectors({
   const brands = useAppStore((state) => state.brands);
 
   return (
-    <div className="space-y-2 border-b border-slate-200 p-3">
-      <label className="block text-xs font-medium text-slate-500">
+    <div className="space-y-2 border-b border-border-ter p-3">
+      <label className="block text-xs font-medium text-text-sec">
         Language
         <select
           value={langLocal}
           onChange={(event) => onLangChange(event.target.value)}
-          className="mt-1 w-full rounded border border-slate-200 px-2 py-1 text-sm"
+          className="mt-1 w-full rounded border border-border-ter px-2 py-1 text-sm"
         >
-          {(locales.length ? locales : ['en-US']).map((locale) => (
+          {(locales.length ? locales : ['EN']).map((locale) => (
             <option key={locale} value={locale}>
               {locale}
             </option>
           ))}
         </select>
       </label>
-      <label className="block text-xs font-medium text-slate-500">
+      <label className="block text-xs font-medium text-text-sec">
         Brand
         <select
           value={paramCustBrand}
           onChange={(event) => onBrandChange(event.target.value)}
-          className="mt-1 w-full rounded border border-slate-200 px-2 py-1 text-sm"
+          className="mt-1 w-full rounded border border-border-ter px-2 py-1 text-sm"
         >
-          {(brands.length ? brands : ['default']).map((brand) => (
+          {(brands.length ? brands : ['SKRILL']).map((brand) => (
             <option key={brand} value={brand}>
               {brand}
             </option>

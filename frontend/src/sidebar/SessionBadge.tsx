@@ -7,15 +7,15 @@ export function SessionBadge() {
 
   if (!sessionId) {
     return (
-      <div className="px-3 py-2 text-xs text-slate-500">No active session</div>
+      <div className="px-3 py-2 text-xs text-text-sec">No active session</div>
     );
   }
 
   return (
-    <div className="border-b border-slate-200 px-3 py-2 text-xs">
+    <div className="border-b border-border-ter px-3 py-2 text-xs">
       <div className="font-medium">{templateName}</div>
-      <div className="text-slate-500">Session: {sessionId.slice(0, 12)}…</div>
-      <div className="text-slate-500">{editCount} edits</div>
+      <div className="text-text-sec">Session: {sessionId.slice(0, 12)}…</div>
+      <div className="text-text-sec">{editCount} edits</div>
     </div>
   );
 }

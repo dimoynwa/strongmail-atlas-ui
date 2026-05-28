@@ -35,7 +35,7 @@ export function ToneBar({ emotion, current, delta, direction }: ToneBarProps) {
           {current} ({deltaLabel})
         </span>
       </div>
-      <div className="h-2 rounded bg-slate-100">
+      <div className="h-2 rounded bg-bg-secondary">
         <div
           className="h-2 rounded"
           style={{ width: `${Math.min(current, 100)}%`, backgroundColor: color }}

@@ -20,10 +20,10 @@ export function Topbar() {
   };
 
   return (
-    <header className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3">
+    <header className="flex items-center justify-between border-b border-border-ter bg-bg-primary px-4 py-3">
       <div>
         <h1 className="text-lg font-semibold">StrongMail Agent Studio</h1>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-text-sec">
           {templateName
             ? `${templateName} · ${langLocal} · ${paramCustBrand}`
             : 'Select a template to begin'}
@@ -33,7 +33,7 @@ export function Topbar() {
         type="button"
         onClick={() => void handleExport()}
         disabled={!sessionId}
-        className="rounded bg-slate-900 px-3 py-1.5 text-sm text-white disabled:cursor-not-allowed disabled:opacity-50"
+        className="rounded bg-text-pri px-3 py-1.5 text-sm text-white disabled:cursor-not-allowed disabled:opacity-50"
       >
         Export
       </button>

@@ -8,7 +8,7 @@ export function WorkingCopySection() {
   const sessionId = useSessionStore((state) => state.sessionId);
 
   return (
-    <section className="border-b border-slate-200">
+    <section className="border-b border-border-ter">
       <button
         type="button"
         className="flex w-full items-center justify-between px-4 py-2 text-sm font-medium"

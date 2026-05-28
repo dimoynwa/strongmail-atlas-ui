@@ -35,6 +35,10 @@ export interface ToneScores {
 
 export interface TemplateListItem {
   name: string;
+  id?: string;
+  key_count?: number;
+  last_modified?: string;
+  summary?: string;
   description?: string;
   locales?: string[];
   brands?: string[];

@@ -8,7 +8,7 @@ import { useAppStore } from '../store/appStore';
 describe('lang/brand guard', () => {
   beforeEach(async () => {
     useSessionStore.getState().resetSession();
-    useSessionStore.setState({ langLocal: 'en-US', paramCustBrand: 'default' });
+    useSessionStore.setState({ langLocal: 'EN', paramCustBrand: 'SKRILL' });
     await useAppStore.getState().loadLocalesAndBrands();
     await useAppStore.getState().loadTemplates();
   });
@@ -18,13 +18,13 @@ describe('lang/brand guard', () => {
     render(<Sidebar />);
 
     await waitFor(() => {
-      expect(screen.getByDisplayValue('en-US')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('EN')).toBeInTheDocument();
     });
 
-    const languageSelect = screen.getByDisplayValue('en-US');
-    await user.selectOptions(languageSelect, 'fr-FR');
+    const languageSelect = screen.getByDisplayValue('EN');
+    await user.selectOptions(languageSelect, 'FR');
 
-    expect(useSessionStore.getState().langLocal).toBe('fr-FR');
+    expect(useSessionStore.getState().langLocal).toBe('FR');
     expect(screen.queryByText(/reset your current session/i)).not.toBeInTheDocument();
   });
 
@@ -34,10 +34,10 @@ describe('lang/brand guard', () => {
     render(<Sidebar />);
 
     await waitFor(() => {
-      expect(screen.getByDisplayValue('en-US')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('EN')).toBeInTheDocument();
     });
 
-    await user.selectOptions(screen.getByDisplayValue('en-US'), 'fr-FR');
+    await user.selectOptions(screen.getByDisplayValue('EN'), 'FR');
 
     expect(
       screen.getByText(/Changing language will reset your current session/i),

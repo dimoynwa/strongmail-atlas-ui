@@ -1,26 +1,61 @@
 import { apiFetch } from './client';
 
-export interface WorkingCopyResponse {
-  working_copy: Record<string, string>;
-  modified_keys: string[];
+export interface WorkingCopyOverrideItem {
+  key: string;
+  value: string;
+  set_at?: string | null;
 }
 
-export function getWorkingCopy(sessionId: string): Promise<WorkingCopyResponse> {
-  return apiFetch<WorkingCopyResponse>(`/working-copy/${sessionId}`);
+interface WorkingCopyApiResponse {
+  session_id: string;
+  overrides: WorkingCopyOverrideItem[];
+  total_overrides: number;
+  session_has_changes: boolean;
 }
 
-export function patchWorkingCopy(
+export interface NormalizedWorkingCopy {
+  workingCopy: Record<string, string>;
+  modifiedKeys: string[];
+}
+
+export function normalizeWorkingCopy(
+  response: WorkingCopyApiResponse,
+): NormalizedWorkingCopy {
+  const workingCopy: Record<string, string> = {};
+
+  for (const override of response.overrides ?? []) {
+    workingCopy[override.key] = override.value;
+  }
+
+  return {
+    workingCopy,
+    modifiedKeys: Object.keys(workingCopy),
+  };
+}
+
+export async function getWorkingCopy(
+  sessionId: string,
+): Promise<NormalizedWorkingCopy> {
+  const response = await apiFetch<WorkingCopyApiResponse>(
+    `/working-copy/${sessionId}`,
+  );
+  return normalizeWorkingCopy(response);
+}
+
+export async function patchWorkingCopy(
   sessionId: string,
   updates: Record<string, string>,
-): Promise<{ status: string }> {
-  return apiFetch<{ status: string }>(`/working-copy/${sessionId}`, {
-    method: 'PATCH',
-    body: JSON.stringify({ updates }),
-  });
+): Promise<void> {
+  for (const [key, value] of Object.entries(updates)) {
+    await apiFetch(`/working-copy/${sessionId}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ key, value }),
+    });
+  }
 }
 
-export function resetWorkingCopy(sessionId: string): Promise<{ status: string }> {
-  return apiFetch<{ status: string }>(`/working-copy/${sessionId}`, {
+export async function resetWorkingCopy(sessionId: string): Promise<void> {
+  await apiFetch(`/working-copy/${sessionId}`, {
     method: 'DELETE',
   });
 }

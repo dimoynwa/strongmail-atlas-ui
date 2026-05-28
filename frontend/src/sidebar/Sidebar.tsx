@@ -34,7 +34,7 @@ export function Sidebar() {
     setConfirmDialog({
       type: 'lang',
       value: nextLang,
-      previous: langLocal ?? 'en-US',
+      previous: langLocal ?? 'EN',
     });
   };
 
@@ -46,7 +46,7 @@ export function Sidebar() {
     setConfirmDialog({
       type: 'brand',
       value: nextBrand,
-      previous: paramCustBrand ?? 'default',
+      previous: paramCustBrand ?? 'SKRILL',
     });
   };
 
@@ -86,18 +86,18 @@ export function Sidebar() {
   );
 
   return (
-    <aside className="flex w-72 flex-col border-r border-slate-200 bg-white">
-      <div className="flex border-b border-slate-200">
+    <aside className="flex w-72 flex-col border-r border-border-ter bg-bg-primary">
+      <div className="flex border-b border-border-ter">
         <button
           type="button"
-          className={`flex-1 px-3 py-2 text-sm ${activeTab === 'template' ? 'border-b-2 border-slate-900 font-semibold' : 'text-slate-500'}`}
+          className={`flex-1 px-3 py-2 text-sm ${activeTab === 'template' ? 'border-b-2 border-text-pri font-semibold' : 'text-text-sec'}`}
           onClick={() => setActiveTab('template')}
         >
           Template
         </button>
         <button
           type="button"
-          className={`flex-1 px-3 py-2 text-sm ${activeTab === 'general' ? 'border-b-2 border-slate-900 font-semibold' : 'text-slate-500'}`}
+          className={`flex-1 px-3 py-2 text-sm ${activeTab === 'general' ? 'border-b-2 border-text-pri font-semibold' : 'text-text-sec'}`}
           onClick={() => setActiveTab('general')}
         >
           General
@@ -107,8 +107,8 @@ export function Sidebar() {
       {activeTab === 'template' && (
         <>
           <ContextSelectors
-            langLocal={langLocal ?? 'en-US'}
-            paramCustBrand={paramCustBrand ?? 'default'}
+            langLocal={langLocal ?? 'EN'}
+            paramCustBrand={paramCustBrand ?? 'SKRILL'}
             onLangChange={handleLangChange}
             onBrandChange={handleBrandChange}
           />
@@ -118,7 +118,7 @@ export function Sidebar() {
             placeholder="Filter templates..."
             value={filter}
             onChange={(event) => setFilter(event.target.value)}
-            className="mx-3 my-2 rounded border border-slate-200 px-2 py-1 text-sm"
+            className="mx-3 my-2 rounded border border-border-ter px-2 py-1 text-sm"
           />
           <TemplateList templates={filteredTemplates} />
           <SidebarFooter />
@@ -127,7 +127,7 @@ export function Sidebar() {
 
       {confirmDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="w-80 rounded bg-white p-4 shadow-lg">
+          <div className="w-80 rounded bg-bg-primary p-4 shadow-lg">
             <p className="mb-4 text-sm">
               Changing {confirmDialog.type === 'lang' ? 'language' : 'brand'} will
               reset your current session. Continue?
@@ -142,7 +142,7 @@ export function Sidebar() {
               </button>
               <button
                 type="button"
-                className="rounded bg-slate-900 px-3 py-1 text-sm text-white"
+                className="rounded bg-text-pri px-3 py-1 text-sm text-white"
                 onClick={() => void handleConfirmChange()}
               >
                 Continue

@@ -32,10 +32,10 @@ export function GeneralChat() {
           </div>
         ))}
         {activeTab === 'general' && isStreamingGlobal && streamingText && (
-          <div className="text-sm text-slate-500">{streamingText}</div>
+          <div className="text-sm text-text-sec">{streamingText}</div>
         )}
       </div>
-      <div className="border-t border-slate-200 p-4">
+      <div className="border-t border-border-ter p-4">
         <div className="flex gap-2">
           <input
             value={value}
@@ -47,13 +47,13 @@ export function GeneralChat() {
               }
             }}
             placeholder="Ask about templates…"
-            className="flex-1 rounded border border-slate-200 px-3 py-2 text-sm"
+            className="flex-1 rounded border border-border-ter px-3 py-2 text-sm"
           />
           <button
             type="button"
             onClick={() => void handleSubmit()}
             disabled={isStreaming || !value.trim()}
-            className="rounded bg-slate-900 px-4 py-2 text-sm text-white disabled:opacity-50"
+            className="rounded bg-text-pri px-4 py-2 text-sm text-white disabled:opacity-50"
           >
             Send
           </button>

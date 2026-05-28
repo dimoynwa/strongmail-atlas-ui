@@ -16,13 +16,13 @@ export function TemplateList({ templates }: TemplateListProps) {
           <button
             type="button"
             onClick={() => void openTemplate(template.name)}
-            className={`mb-1 w-full rounded px-3 py-2 text-left text-sm hover:bg-slate-100 ${
-              activeTemplate === template.name ? 'bg-slate-100 font-medium' : ''
+            className={`mb-1 w-full rounded px-3 py-2 text-left text-sm hover:bg-bg-secondary ${
+              activeTemplate === template.name ? 'bg-bg-secondary font-medium' : ''
             }`}
           >
             <span className="block">{template.name}</span>
             {template.description && (
-              <span className="block text-xs text-slate-500">
+              <span className="block text-xs text-text-sec">
                 {template.description}
               </span>
             )}

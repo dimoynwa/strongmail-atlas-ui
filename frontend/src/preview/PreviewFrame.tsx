@@ -6,7 +6,7 @@ export function PreviewFrame() {
 
   if (!sessionId) {
     return (
-      <div className="flex flex-1 items-center justify-center text-sm text-slate-500">
+      <div className="flex flex-1 items-center justify-center text-sm text-text-sec">
         Open a template to see the preview
       </div>
     );
@@ -17,7 +17,7 @@ export function PreviewFrame() {
       title="Template preview"
       srcDoc={resolvedHtml}
       sandbox="allow-same-origin"
-      className="h-full w-full flex-1 border-0 bg-white"
+      className="h-full w-full flex-1 border-0 bg-bg-primary"
     />
   );
 }

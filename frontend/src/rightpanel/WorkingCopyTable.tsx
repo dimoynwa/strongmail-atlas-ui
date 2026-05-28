@@ -10,7 +10,7 @@ export function WorkingCopyTable() {
 
   if (!sessionId) {
     return (
-      <div className="px-4 pb-3 text-xs text-slate-500">
+      <div className="px-4 pb-3 text-xs text-text-sec">
         No working copy available
       </div>
     );
@@ -20,14 +20,14 @@ export function WorkingCopyTable() {
     <div className="px-4 pb-3">
       <table className="w-full text-left text-xs">
         <thead>
-          <tr className="text-slate-500">
+          <tr className="text-text-sec">
             <th className="pb-1">Key</th>
             <th className="pb-1">Value</th>
           </tr>
         </thead>
         <tbody>
-          {Object.entries(workingCopy).map(([key, value]) => (
-            <tr key={key} className="relative border-t border-slate-100">
+          {Object.entries(workingCopy ?? {}).map(([key, value]) => (
+            <tr key={key} className="relative border-t border-border-ter">
               <td
                 className={`py-2 pr-2 align-top font-medium ${
                   modifiedKeys.has(key) ? 'text-green-700' : ''

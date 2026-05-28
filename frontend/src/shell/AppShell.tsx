@@ -27,7 +27,7 @@ export function AppShell() {
   }, [pollHealth, stopPolling]);
 
   return (
-    <div className="flex h-screen flex-col bg-slate-50 text-slate-900">
+    <div className="flex h-screen flex-col bg-bg-tertiary text-text-pri">
       <Topbar />
       <div className="flex min-h-0 flex-1">
         <Sidebar />

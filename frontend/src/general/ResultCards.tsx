@@ -11,12 +11,12 @@ export function ResultCards() {
   }
 
   return (
-    <div className="border-b border-slate-200 p-4">
+    <div className="border-b border-border-ter p-4">
       <div className="mb-2 flex items-center justify-between">
         <h3 className="text-sm font-medium">Results</h3>
         <button
           type="button"
-          className="text-xs text-slate-500 hover:text-slate-900"
+          className="text-xs text-text-sec hover:text-text-pri"
           onClick={() => clearGeneralResults()}
         >
           Clear results
@@ -26,15 +26,15 @@ export function ResultCards() {
         {cards.map((card) => (
           <div
             key={`${card.template_name}-${card.description ?? ''}`}
-            className="rounded border border-slate-200 p-3 text-sm"
+            className="rounded border border-border-ter p-3 text-sm"
           >
             <div className="font-medium">{card.template_name}</div>
             {card.description && (
-              <div className="text-xs text-slate-500">{card.description}</div>
+              <div className="text-xs text-text-sec">{card.description}</div>
             )}
             <button
               type="button"
-              className="mt-2 text-xs font-medium text-slate-900 hover:underline"
+              className="mt-2 text-xs font-medium text-text-pri hover:underline"
               onClick={() => {
                 setActiveTab('template');
                 void openTemplate(card.template_name);

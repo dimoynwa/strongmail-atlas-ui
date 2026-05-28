@@ -14,7 +14,7 @@ export function ChatInput() {
   };
 
   return (
-    <div className="border-t border-slate-200 p-4">
+    <div className="border-t border-border-ter p-4">
       <div className="flex gap-2">
         <textarea
           value={value}
@@ -27,13 +27,13 @@ export function ChatInput() {
           }}
           placeholder={sessionId ? 'Ask the assistant…' : 'Open a template first'}
           disabled={!sessionId || isStreaming}
-          className="min-h-[72px] flex-1 resize-none rounded border border-slate-200 px-3 py-2 text-sm"
+          className="min-h-[72px] flex-1 resize-none rounded border border-border-ter px-3 py-2 text-sm"
         />
         <button
           type="button"
           onClick={() => void handleSubmit()}
           disabled={!sessionId || isStreaming || !value.trim()}
-          className="self-end rounded bg-slate-900 px-4 py-2 text-sm text-white disabled:cursor-not-allowed disabled:opacity-50"
+          className="self-end rounded bg-text-pri px-4 py-2 text-sm text-white disabled:cursor-not-allowed disabled:opacity-50"
         >
           Send
         </button>

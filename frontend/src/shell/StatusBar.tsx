@@ -6,7 +6,7 @@ function HealthDot({ status }: { status: 'ok' | 'degraded' | 'unavailable' | und
     status === 'ok'
       ? 'bg-green-500'
       : status === 'degraded'
-        ? 'bg-amber-500'
+        ? 'bg-bg-warning0'
         : 'bg-red-500';
 
   return <span className={`inline-block h-2 w-2 rounded-full ${color}`} aria-hidden />;
@@ -17,7 +17,7 @@ export function StatusBar() {
   const health = useAppStore((state) => state.health);
 
   return (
-    <footer className="flex items-center justify-between border-t border-slate-200 bg-white px-4 py-2 text-sm">
+    <footer className="flex items-center justify-between border-t border-border-ter bg-bg-primary px-4 py-2 text-sm">
       <span>{isStreaming ? 'Agent busy…' : 'Agent ready'}</span>
       <div className="flex items-center gap-4">
         {Object.entries(health).map(([component, status]) => (

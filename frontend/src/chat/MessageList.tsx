@@ -22,7 +22,7 @@ export function MessageList() {
       {isStreaming && (
         <>
           {activeTool && (
-            <div className="text-xs text-slate-500">Running tool: {activeTool}</div>
+            <div className="text-xs text-text-sec">Running tool: {activeTool}</div>
           )}
           {streamingText ? (
             <MessageBubble

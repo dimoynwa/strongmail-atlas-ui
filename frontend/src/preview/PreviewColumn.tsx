@@ -6,7 +6,7 @@ export function PreviewColumn() {
   usePreviewRefresh();
 
   return (
-    <section className="flex min-w-0 flex-1 flex-col border-r border-slate-200 bg-white">
+    <section className="flex min-w-0 flex-1 flex-col border-r border-border-ter bg-bg-primary">
       <PreviewLabelBar />
       <PreviewFrame />
     </section>

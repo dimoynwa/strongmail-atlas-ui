@@ -19,7 +19,7 @@ export function QuickActionChips() {
           key={action}
           type="button"
           onClick={() => void sendMessage(action)}
-          className="rounded-full border border-slate-200 px-3 py-1 text-xs hover:bg-slate-50"
+          className="rounded-full border border-border-ter px-3 py-1 text-xs hover:bg-bg-secondary"
         >
           {action}
         </button>

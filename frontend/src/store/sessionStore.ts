@@ -13,8 +13,8 @@ import { highlightModifiedValues } from '../utils/preview';
 
 const initialSessionState = {
   templateName: null as string | null,
-  langLocal: 'en-US' as string | null,
-  paramCustBrand: 'default' as string | null,
+  langLocal: 'EN' as string | null,
+  paramCustBrand: 'SKRILL' as string | null,
   sessionId: null as string | null,
   messages: [] as Message[],
   streamingText: '',
@@ -95,11 +95,13 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
       param_cust_brand: paramCustBrand,
     });
 
-    const workingCopyResponse = await getWorkingCopy(sessionResponse.session_id);
-    const modifiedKeys = new Set(workingCopyResponse.modified_keys);
+    const { workingCopy, modifiedKeys: modifiedKeyList } = await getWorkingCopy(
+      sessionResponse.session_id,
+    );
+    const modifiedKeys = new Set(modifiedKeyList);
     const resolvedHtml = await fetchAndSetPreview(
       sessionResponse.session_id,
-      workingCopyResponse.working_copy,
+      workingCopy,
       modifiedKeys,
     );
 
@@ -112,7 +114,7 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
     set({
       sessionId: sessionResponse.session_id,
       templateName,
-      workingCopy: workingCopyResponse.working_copy,
+      workingCopy,
       modifiedKeys,
       resolvedHtml,
       messages: [welcomeMessage],
@@ -219,16 +221,12 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
     if (!sessionId) return;
 
     await resetWorkingCopy(sessionId);
-    const workingCopyResponse = await getWorkingCopy(sessionId);
-    const modifiedKeys = new Set(workingCopyResponse.modified_keys);
-    const resolvedHtml = await fetchAndSetPreview(
-      sessionId,
-      workingCopyResponse.working_copy,
-      modifiedKeys,
-    );
+    const { workingCopy, modifiedKeys: modifiedKeyList } = await getWorkingCopy(sessionId);
+    const modifiedKeys = new Set(modifiedKeyList);
+    const resolvedHtml = await fetchAndSetPreview(sessionId, workingCopy, modifiedKeys);
 
     set({
-      workingCopy: workingCopyResponse.working_copy,
+      workingCopy,
       modifiedKeys,
       resolvedHtml,
       toneStale: true,
@@ -243,7 +241,7 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
     const response = await evaluateTone(sessionId);
     set({
       toneScores: response.scores,
-      toneStoredScores: response.baseline_scores,
+      toneStoredScores: response.baselineScores,
       toneStale: false,
     });
   },
@@ -253,11 +251,11 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
     if (!sessionId) return;
 
     await undoTone(sessionId);
-    const workingCopyResponse = await getWorkingCopy(sessionId);
-    const modifiedKeys = new Set(workingCopyResponse.modified_keys);
+    const { workingCopy, modifiedKeys: modifiedKeyList } = await getWorkingCopy(sessionId);
+    const modifiedKeys = new Set(modifiedKeyList);
 
     set({
-      workingCopy: workingCopyResponse.working_copy,
+      workingCopy,
       modifiedKeys,
       toneStale: true,
     });
@@ -288,16 +286,12 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
     if (!sessionId) return;
 
     await applyTone(sessionId, keys);
-    const workingCopyResponse = await getWorkingCopy(sessionId);
-    const modifiedKeys = new Set(workingCopyResponse.modified_keys);
-    const resolvedHtml = await fetchAndSetPreview(
-      sessionId,
-      workingCopyResponse.working_copy,
-      modifiedKeys,
-    );
+    const { workingCopy, modifiedKeys: modifiedKeyList } = await getWorkingCopy(sessionId);
+    const modifiedKeys = new Set(modifiedKeyList);
+    const resolvedHtml = await fetchAndSetPreview(sessionId, workingCopy, modifiedKeys);
 
     set({
-      workingCopy: workingCopyResponse.working_copy,
+      workingCopy,
       modifiedKeys,
       resolvedHtml,
       toneStale: true,

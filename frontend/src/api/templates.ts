@@ -1,14 +1,33 @@
 import { apiFetch } from './client';
 import type { TemplateListItem } from '../types';
 
-export function getTemplates(): Promise<TemplateListItem[]> {
-  return apiFetch<TemplateListItem[]>('/templates');
+interface TemplateListResponse {
+  templates: TemplateListItem[];
+  total: number;
 }
 
-export function getLocales(): Promise<string[]> {
-  return apiFetch<string[]>('/locales');
+interface LocalesResponse {
+  locales: string[];
 }
 
-export function getBrands(): Promise<string[]> {
-  return apiFetch<string[]>('/brands');
+interface BrandsResponse {
+  brands: string[];
+}
+
+export async function getTemplates(): Promise<TemplateListItem[]> {
+  const response = await apiFetch<TemplateListResponse>('/templates');
+  return response.templates.map((template) => ({
+    ...template,
+    description: template.summary ?? template.description,
+  }));
+}
+
+export async function getLocales(): Promise<string[]> {
+  const response = await apiFetch<LocalesResponse>('/templates/locales');
+  return response.locales;
+}
+
+export async function getBrands(): Promise<string[]> {
+  const response = await apiFetch<BrandsResponse>('/templates/brands');
+  return response.brands;
 }

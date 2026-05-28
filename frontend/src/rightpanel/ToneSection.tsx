@@ -17,10 +17,10 @@ export function ToneSection() {
         <ReEvaluateButton />
       </div>
       {!sessionId && (
-        <p className="text-xs text-slate-500">Open a template to evaluate tone.</p>
+        <p className="text-xs text-text-sec">Open a template to evaluate tone.</p>
       )}
       {toneStale && sessionId && (
-        <p className="mb-2 rounded bg-amber-50 px-2 py-1 text-xs text-amber-800">
+        <p className="mb-2 rounded bg-bg-warning px-2 py-1 text-xs text-text-warning">
           Tone evaluation is stale. Re-evaluate to refresh scores.
         </p>
       )}
