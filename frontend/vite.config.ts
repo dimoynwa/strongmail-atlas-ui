@@ -25,6 +25,7 @@ export default defineConfig({
       '/tone': 'http://localhost:8000',
       '/health': 'http://localhost:8000',
       '/chat': 'http://localhost:8000',
+      '/refresh': 'http://localhost:8000',
     },
   },
   test: {

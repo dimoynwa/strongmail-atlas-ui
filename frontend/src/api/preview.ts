@@ -25,8 +25,9 @@ export async function getPreview(
   const response = await apiFetch<PreviewApiResponse>(
     `/preview/${sessionId}?highlight_modified=${highlightModified}`,
   );
+  const resolvedHtml = response.resolved_html ?? '';
   return {
-    html: response.resolved_html ?? '',
+    html: resolvedHtml,
     unresolvableKeys: response.unresolvable_keys ?? [],
     resolvedCount: response.resolved_count ?? 0,
     totalPlaceholders: response.total_placeholders ?? 0,

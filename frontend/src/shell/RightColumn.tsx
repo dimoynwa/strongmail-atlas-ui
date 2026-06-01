@@ -1,11 +1,9 @@
-import { WorkingCopySection } from '../rightpanel/WorkingCopySection';
-import { ToneSection } from '../rightpanel/ToneSection';
+import { RightPanel } from '../rightpanel/RightPanel';
 
 export function RightColumn() {
   return (
     <div className="col-right bg-bg-primary">
-      <WorkingCopySection />
-      <ToneSection />
+      <RightPanel />
     </div>
   );
 }

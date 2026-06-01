@@ -1,7 +1,9 @@
 import { StatusBar } from './StatusBar';
 import { Topbar } from './Topbar';
 import { TemplateLoadingOverlay } from './TemplateLoadingOverlay';
+import { ToastContainer } from './ToastContainer';
 import { Sidebar } from '../sidebar/Sidebar';
+import { MaintenanceDrawer } from '../sidebar/MaintenanceDrawer';
 import { LeftColumn } from './LeftColumn';
 import { RightColumn } from './RightColumn';
 import { GeneralLayout } from '../general/GeneralLayout';
@@ -43,6 +45,8 @@ export function AppShell() {
         )}
       </div>
       <StatusBar />
+      <MaintenanceDrawer />
+      <ToastContainer />
     </div>
   );
 }
