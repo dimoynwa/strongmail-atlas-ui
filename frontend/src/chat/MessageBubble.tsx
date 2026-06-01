@@ -1,4 +1,5 @@
 import type { Message } from '../types';
+import { MarkdownContent } from './MarkdownContent';
 import { ToolChip } from './ToolChip';
 
 interface MessageBubbleProps {
@@ -20,7 +21,10 @@ export function MessageBubble({ message }: MessageBubbleProps) {
         }`}
       >
         {message.toolName && <ToolChip name={message.toolName} />}
-        <p className="whitespace-pre-wrap">{message.content}</p>
+        <MarkdownContent
+          content={message.content}
+          variant={isUser ? 'user' : message.isError ? 'error' : 'assistant'}
+        />
       </div>
     </div>
   );

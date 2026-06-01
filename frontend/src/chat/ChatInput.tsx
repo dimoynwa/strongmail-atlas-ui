@@ -28,7 +28,7 @@ export function ChatInput() {
           }}
           placeholder={sessionId ? 'Ask about this template…' : 'Open a template first'}
           disabled={!sessionId || isStreaming}
-          className="flex-1 rounded-full border border-border-ter bg-bg-secondary px-3 py-1.5 text-[12px] outline-none disabled:opacity-50"
+          className="flex-1 rounded-full border border-border-ter bg-bg-secondary px-3 py-1.5 text-[12px] text-text-pri outline-none placeholder:text-text-ter disabled:opacity-50"
         />
         <button
           type="button"

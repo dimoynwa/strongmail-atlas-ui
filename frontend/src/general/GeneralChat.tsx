@@ -1,6 +1,8 @@
-import { useState, useMemo } from 'react';
-import { useSessionStore } from '../store/sessionStore';
+import { useMemo, useState } from 'react';
+import { MessageBubble } from '../chat/MessageBubble';
+import { TypingIndicator } from '../chat/TypingIndicator';
 import { useChat } from '../hooks/useChat';
+import { useSessionStore } from '../store/sessionStore';
 
 export function GeneralChat() {
   const [value, setValue] = useState('');
@@ -22,17 +24,22 @@ export function GeneralChat() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-3 py-3">
         {generalMessages.map((message) => (
-          <div
-            key={message.id}
-            className={`mb-2 text-sm ${message.role === 'user' ? 'text-right' : ''}`}
-          >
-            {message.content}
-          </div>
+          <MessageBubble key={message.id} message={message} />
         ))}
-        {activeTab === 'general' && isStreamingGlobal && streamingText && (
-          <div className="text-sm text-text-sec">{streamingText}</div>
+        {activeTab === 'general' && isStreamingGlobal && (
+          streamingText ? (
+            <MessageBubble
+              message={{
+                id: 'streaming',
+                role: 'assistant',
+                content: streamingText,
+              }}
+            />
+          ) : (
+            <TypingIndicator />
+          )
         )}
       </div>
       <div className="border-t border-border-ter p-4">
@@ -47,7 +54,7 @@ export function GeneralChat() {
               }
             }}
             placeholder="Ask about templates…"
-            className="flex-1 rounded border border-border-ter px-3 py-2 text-sm"
+            className="flex-1 rounded border border-border-ter bg-bg-secondary px-3 py-2 text-sm text-text-pri outline-none placeholder:text-text-ter"
           />
           <button
             type="button"

@@ -1,4 +1,9 @@
 import { http, HttpResponse } from 'msw';
+import {
+  createBatchSuccessEvents,
+  createRefreshSuccessEvents,
+  createSSEStream,
+} from './sseHelper';
 
 let workingCopyState: Record<string, string> = {
   header_text: 'Welcome to our service!',
@@ -18,7 +23,7 @@ function workingCopyApiResponse(sessionId: string) {
   };
 }
 
-export const handlers = [
+const baseHandlers = [
   http.get('/templates', () => {
     return HttpResponse.json({
       templates: [
@@ -218,9 +223,140 @@ export const handlers = [
   }),
 ];
 
+let activeMaintenanceJobId: string | null = null;
+let maintenanceJobCounter = 0;
+
+function nextJobId(prefix: string): string {
+  maintenanceJobCounter += 1;
+  return `${prefix}-${maintenanceJobCounter}`;
+}
+
+const maintenanceHandlers = [
+  http.post('/refresh/template/:name', ({ params }) => {
+    if (activeMaintenanceJobId) {
+      return HttpResponse.json(
+        {
+          error: 'Conflict',
+          message: 'A maintenance job is already running',
+          locked_by: activeMaintenanceJobId,
+        },
+        { status: 409 },
+      );
+    }
+
+    const job_id = nextJobId('refresh-template');
+    activeMaintenanceJobId = job_id;
+    return HttpResponse.json({
+      job_id,
+      status: 'pending',
+      type: 'template',
+      target: String(params.name),
+      started_at: '2026-05-31T00:00:00Z',
+    });
+  }),
+
+  http.post('/refresh/full', () => {
+    if (activeMaintenanceJobId) {
+      return HttpResponse.json(
+        {
+          error: 'Conflict',
+          locked_by: activeMaintenanceJobId,
+        },
+        { status: 409 },
+      );
+    }
+
+    const job_id = nextJobId('refresh-full');
+    activeMaintenanceJobId = job_id;
+    return HttpResponse.json({
+      job_id,
+      status: 'pending',
+      type: 'full',
+      started_at: '2026-05-31T00:00:00Z',
+    });
+  }),
+
+  http.get('/refresh/stream/:job_id', () => {
+    const stream = createSSEStream(createRefreshSuccessEvents('welcome_email'), 25);
+
+    queueMicrotask(() => {
+      activeMaintenanceJobId = null;
+    });
+
+    return new HttpResponse(stream, {
+      headers: { 'Content-Type': 'text/event-stream' },
+    });
+  }),
+
+  http.post('/tone/batch-reevaluate', () => {
+    if (activeMaintenanceJobId) {
+      return HttpResponse.json(
+        {
+          error: 'Conflict',
+          locked_by: activeMaintenanceJobId,
+        },
+        { status: 409 },
+      );
+    }
+
+    const job_id = nextJobId('tone-batch');
+    activeMaintenanceJobId = job_id;
+    return HttpResponse.json(
+      {
+        job_id,
+        status: 'pending',
+        started_at: '2026-05-31T00:00:00Z',
+      },
+      { status: 202 },
+    );
+  }),
+
+  http.get('/tone/batch-stream/:job_id', () => {
+    const stream = createSSEStream(createBatchSuccessEvents());
+
+    queueMicrotask(() => {
+      activeMaintenanceJobId = null;
+    });
+
+    return new HttpResponse(stream, {
+      headers: { 'Content-Type': 'text/event-stream' },
+    });
+  }),
+
+  http.get('/tone/export', ({ request }) => {
+    const url = new URL(request.url);
+    const format = url.searchParams.get('format') ?? 'csv';
+
+    if (format === 'error') {
+      return HttpResponse.json({ message: 'Export unavailable' }, { status: 503 });
+    }
+
+    const content =
+      format === 'xlsx'
+        ? 'mock xlsx content'
+        : 'template_name,gratitude\nwelcome_email,80';
+
+    return new HttpResponse(content, {
+      headers: {
+        'Content-Type':
+          format === 'xlsx'
+            ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            : 'text/csv',
+      },
+    });
+  }),
+];
+
+export const handlers = [
+  ...baseHandlers,
+  ...maintenanceHandlers,
+];
+
 export function resetMockState(): void {
   workingCopyState = {
     header_text: 'Welcome to our service!',
     body_text: 'We are glad you are here.',
   };
+  activeMaintenanceJobId = null;
+  maintenanceJobCounter = 0;
 }
